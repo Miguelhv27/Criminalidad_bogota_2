@@ -1,0 +1,4 @@
+cluster,tasa_hurto_a_personas,tasa_violencia_intrafamiliar,tasa_lesiones_personales,tasa_hurto_a_comercio,tasa_hurto_a_residencias,tasa_delitos_sexuales,tasa_hurto_motocicletas,tasa_hurto_automotores,tasa_extorsion,tasa_homicidios,tasa_hurto_a_entidades_financieras,tasa_secuestro,tasa_total,poblacion,riesgo_interpretado,n_localidades
+Cluster_0,886.41,353.59,197.62,93.21,69.46,60.21,46.31,33.09,11.94,11.57,0.19,0.12,1763.71,628682.18,Bajo,11
+Cluster_1,5767.16,982.86,789.48,656.34,151.79,385.32,71.54,60.6,96.88,37.59,2.89,0.43,9002.87,69644.67,Alto,3
+Cluster_2,2994.93,343.61,277.03,363.08,144.58,80.61,56.26,70.48,28.8,8.24,1.0,0.61,4369.21,167966.4,Medio,5

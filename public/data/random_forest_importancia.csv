@@ -1,0 +1,13 @@
+variable,importancia_gini,importancia_permutacion,importancia_permutacion_std,variable_legible
+tasa_hurto_a_personas,0.1655649957173321,0.0,0.0,HURTO A PERSONAS
+tasa_violencia_intrafamiliar,0.0780500609984033,0.0,0.0,VIOLENCIA INTRAFAMILIAR
+tasa_lesiones_personales,0.09579717346671121,0.0,0.0,LESIONES PERSONALES
+tasa_hurto_a_comercio,0.1159417756476031,0.0,0.0,HURTO A COMERCIO
+tasa_hurto_a_residencias,0.11496306740738862,0.0,0.0,HURTO A RESIDENCIAS
+tasa_delitos_sexuales,0.08096648050168008,0.0,0.0,DELITOS SEXUALES
+tasa_hurto_motocicletas,0.014267516016114146,0.0,0.0,HURTO MOTOCICLETAS
+tasa_hurto_automotores,0.021005523526518244,0.0,0.0,HURTO AUTOMOTORES
+tasa_extorsion,0.1554082121318575,0.0,0.0,EXTORSION
+tasa_homicidios,0.055586407356179125,0.0,0.0,HOMICIDIOS
+tasa_hurto_a_entidades_financieras,0.08050507805932731,0.0,0.0,HURTO A ENTIDADES FINANCIERAS
+tasa_secuestro,0.021943709170885308,0.0,0.0,SECUESTRO

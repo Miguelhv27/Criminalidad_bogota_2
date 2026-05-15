@@ -1,0 +1,3 @@
+tipo_validacion,descripcion,accuracy,f1_weighted,n_total,n_fallback,interpretacion
+Tradicional (Leave-One-Out),"Una localidad como prueba, las demas como entrenamiento. Sin restriccion espacial.",0.9474,0.9445,19,0,Evalua el desempeno promedio al excluir cada localidad. Puede ser optimista si existe autocorrelacion espacial.
+Espacial (Spatial Block CV),"Al excluir la localidad de prueba, tambien se excluyen sus vecinas directas.",0.8421,0.8325,19,1,Evalua el desempeno real en zonas sin datos vecinos. Es la metrica mas honesta para datos espacialmente autocorrelacionados. Diferencia con LOO: 0.1053. Localidades con fallback: 1.
