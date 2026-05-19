@@ -43,12 +43,11 @@ function useCSV(filename) {
 // ── Nav ───────────────────────────────────────────────────────────────────────
 const NAV = [
   { id:'intro',          label:'Contexto'        },
-  { id:'exploratory',    label:'Exploración'     },
+  { id:'exploratory',    label:'Exploracion'     },
   { id:'temporal',       label:'Serie temporal'  },
-  { id:'spatial',        label:'Autocorrelación' },
+  { id:'spatial',        label:'Autocorrelacion' },
   { id:'ml',             label:'Clustering ML'   },
   { id:'model',          label:'Modelo espacial' },
-  { id:'validation',     label:'Validación'      },
   { id:'interpretation', label:'Conclusiones'    },
 ];
 
@@ -118,17 +117,15 @@ export default function App() {
   const [lisa,       lisaOk]      = useCSV('lisa_resultados.csv');
   const [clusters,   clustersOk]  = useCSV('clustering_ml.csv');
   const [perfil,     perfilOk]    = useCSV('perfil_clusters.csv');
-  const [validacion, validOk]     = useCSV('validacion_resultados.csv');
   const [codo,       codoOk]      = useCSV('metodo_codo.csv');
   const [serie,      serieOk]     = useCSV('serie_temporal.csv');
   const [vecindad,   vecindadOk]  = useCSV('vecindad_espacial.csv');
-  const [comparativa,comparOk]    = useCSV('comparativa_lisa_ml.csv');
   const [slagCoefs,  slagCoefsOk] = useCSV('slag_coeficientes.csv');
   const [slagPred,   slagPredOk]  = useCSV('slag_predicciones.csv');
   const [slagMet,    slagMetOk]   = useCSV('slag_metricas.csv');
 
   const allReady = tasasOk && moranOk && lisaOk && clustersOk && perfilOk &&
-                   validOk && codoOk && serieOk && vecindadOk && comparOk &&
+                   codoOk && serieOk && vecindadOk &&
                    slagCoefsOk && slagPredOk && slagMetOk;
 
   // ── Datos derivados ────────────────────────────────────────────────────────
@@ -179,24 +176,9 @@ export default function App() {
     .sort((a,b) => a.tasa_total - b.tasa_total)
     .map((c,i)=>({ ...c, color:CLUSTER_COLOR[i]??'#94a3b8', label:CLUSTER_LABEL[i]??c.cluster }));
 
-  // Spatial Lag Model — separar constante y rho
   const slagVars    = slagCoefs.filter(d => !['CONSTANTE','W_tasa_total (Rho)'].includes(d.variable));
   const slagRho     = slagCoefs.find(d => d.variable === 'W_tasa_total (Rho)') || {};
   const slagMetrica = slagMet[0] || {};
-
-  // Textos limpios para la validacion (quitar texto técnico del CSV)
-  const validacionLabels = [
-    {
-      tipo: 'Tradicional (Leave-One-Out)',
-      desc: 'Una localidad como prueba, las demas como entrenamiento. Sin restriccion espacial.',
-      interp: 'Evalua el desempeno promedio al excluir cada localidad. Puede ser optimista si existe autocorrelacion espacial.'
-    },
-    {
-      tipo: 'Espacial (Spatial Block CV)',
-      desc: 'Al excluir la localidad de prueba, tambien se excluyen sus vecinas directas.',
-      interp: 'Evalua el desempeno real en zonas sin datos vecinos. Es la metrica mas honesta para datos espacialmente autocorrelacionados.'
-    }
-  ];
 
   const lisaSignificativas = [
     { nombre:'Santa Fe',       tipo:'HH', color:'#fca5a5', desc:'Alta criminalidad rodeada de vecinas tambien altas. Epicentro espacial del riesgo en Bogota.' },
@@ -334,9 +316,9 @@ export default function App() {
               <h4>Escala de riesgo</h4>
               <p style={{fontSize:12,color:'#6b7280',marginBottom:10}}>Umbrales basados en los grupos del analisis de clustering.</p>
               {[
-                {label:'Alto (3.000 o mas)',     color:RIESGO_COLOR.Alto},
-                {label:'Medio (1.500 a 3.000)',  color:RIESGO_COLOR.Medio},
-                {label:'Bajo (menos de 1.500)',  color:RIESGO_COLOR.Bajo},
+                {label:'Alto (3.000 o mas)',    color:RIESGO_COLOR.Alto},
+                {label:'Medio (1.500 a 3.000)', color:RIESGO_COLOR.Medio},
+                {label:'Bajo (menos de 1.500)', color:RIESGO_COLOR.Bajo},
               ].map(l=>(
                 <div className="legend-row" key={l.label}>
                   <span className="legend-dot" style={{background:l.color}}/><span>{l.label}</span>
@@ -494,9 +476,9 @@ export default function App() {
             </div>
             <div className="explain-cards">
               {[
-                {tag:'HH', label:'Alto-Alto',       desc:'Alta criminalidad rodeada de vecinas tambien altas. Hotspot consolidado.',            color:'#fca5a5'},
-                {tag:'LL', label:'Bajo-Bajo',        desc:'Baja criminalidad con vecinas similares. Efecto protector del entorno geografico.',  color:'#93c5fd'},
-                {tag:'NS', label:'No significativo', desc:'Sin evidencia local de clustering. No implica ausencia de riesgo.',                  color:'#e2e8f0'},
+                {tag:'HH', label:'Alto-Alto',       desc:'Alta criminalidad rodeada de vecinas tambien altas. Hotspot consolidado.',           color:'#fca5a5'},
+                {tag:'LL', label:'Bajo-Bajo',        desc:'Baja criminalidad con vecinas similares. Efecto protector del entorno geografico.', color:'#93c5fd'},
+                {tag:'NS', label:'No significativo', desc:'Sin evidencia local de clustering. No implica ausencia de riesgo.',                 color:'#e2e8f0'},
               ].map(e=>(
                 <div className="explain-item" key={e.tag}>
                   <span className="explain-tag" style={{background:e.tag==='NS'?'#94a3b8':'#374151'}}>{e.tag}</span>
@@ -614,7 +596,6 @@ export default function App() {
             </ResponsiveContainer>
             <p className="chart-note">Azul = significativo (p menor a 0.05). Gris = no significativo. Modelo ML Spatial Lag, N=13 localidades.</p>
 
-            {/* Tabla de coeficientes */}
             <div style={{marginTop:20}}>
               <div style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr',gap:4,fontSize:11,fontWeight:600,color:'#6b7280',borderBottom:'1px solid #e8e6e1',paddingBottom:6,marginBottom:6}}>
                 <span>Variable</span>
@@ -642,7 +623,6 @@ export default function App() {
           </div>
 
           <div className="right-panel">
-            {/* Metricas del modelo */}
             <div className="card">
               <h3 className="card-title">Desempeno del modelo</h3>
               <p className="card-sub">El R indica que proporcion de la variacion en criminalidad explica el modelo.</p>
@@ -673,7 +653,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Predicciones vs reales */}
             <div className="card">
               <h3 className="card-title">Predicciones vs. valores reales</h3>
               <p className="card-sub">Cada fila compara la tasa real con lo que predice el modelo. Residuos pequenos indican buen ajuste.</p>
@@ -710,79 +689,10 @@ export default function App() {
         </div>
       </section>
 
-      {/* 06 - VALIDACION */}
-      <section id="validation" className="section section-alt">
+      {/* 06 - CONCLUSIONES */}
+      <section id="interpretation" className="section section-alt">
         <SectionHeader
-          eyebrow="06 - Validacion"
-          title="¿El modelo funciona bien cuando los vecinos no estan disponibles?"
-          desc="Comparamos Leave-One-Out (clasica) y Spatial Block CV (espacial). La segunda excluye tambien las vecinas de la localidad de prueba, evitando que el modelo aproveche la autocorrelacion espacial."
-        />
-        <div className="two-col">
-          <div className="validation-cards">
-            {validacion.map((v,i)=>(
-              <div className="val-card" key={i}>
-                <span className="val-type">{validacionLabels[i]?.tipo || v.tipo_validacion}</span>
-                <p className="val-desc">{validacionLabels[i]?.desc || v.descripcion}</p>
-                <div className="val-metrics">
-                  <div className="val-metric">
-                    <div className="val-circle" style={{background:`conic-gradient(#6366f1 ${Number(v.accuracy)*360}deg, #e5e7eb 0deg)`}}>
-                      <span>{(Number(v.accuracy)*100).toFixed(1)}%</span>
-                    </div>
-                    <label>Accuracy</label>
-                  </div>
-                  <div className="val-metric">
-                    <div className="val-circle" style={{background:`conic-gradient(#8b5cf6 ${Number(v.f1_weighted)*360}deg, #e5e7eb 0deg)`}}>
-                      <span>{(Number(v.f1_weighted)*100).toFixed(1)}%</span>
-                    </div>
-                    <label>F1-score</label>
-                  </div>
-                </div>
-                <p className="val-interp">{validacionLabels[i]?.interp || v.interpretacion}</p>
-              </div>
-            ))}
-          </div>
-          <div className="right-panel">
-            <div className="card">
-              <h3 className="card-title">Comparacion visual de metricas</h3>
-              <p className="card-sub">La diferencia revela cuanto depende el modelo de la autocorrelacion espacial.</p>
-              <div className="diff-viz">
-                {validacion.map((v,i)=>(
-                  <div className="diff-bar-container" key={i}>
-                    <div className="diff-label">{validacionLabels[i]?.tipo || v.tipo_validacion}</div>
-                    <div className="diff-bar-track">
-                      <div className="diff-bar-fill" style={{width:`${Number(v.accuracy)*100}%`,background:i===0?'#6366f1':'#8b5cf6'}}/>
-                      <span className="diff-bar-val">{(Number(v.accuracy)*100).toFixed(1)}%</span>
-                    </div>
-                  </div>
-                ))}
-                {validacion.length===2&&(
-                  <div className="diff-conclusion">
-                    <span className="diff-delta">
-                      Diferencia = {Math.abs((Number(validacion[0].accuracy)-Number(validacion[1].accuracy))*100).toFixed(1)} pp
-                    </span>
-                    <p>Una diferencia pequena indica que el modelo generaliza bien incluso sin la informacion de los vecinos geograficos.</p>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="explain-cards">
-              <div className="explain-item">
-                <span className="explain-tag" style={{background:'#6366f1'}}>LOO</span>
-                <div><strong>Leave-One-Out</strong><p>Cada localidad se prueba con las 18 restantes. Puede ser optimista si las vecinas estan en el set de entrenamiento.</p></div>
-              </div>
-              <div className="explain-item">
-                <span className="explain-tag" style={{background:'#8b5cf6'}}>SCV</span>
-                <div><strong>Spatial Block CV</strong><p>Al evaluar la localidad i, tambien se excluyen sus vecinas directas. La metrica mas honesta para datos autocorrelacionados.</p></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 07 - CONCLUSIONES */}
-      <section id="interpretation" className="section">
-        <SectionHeader
-          eyebrow="07 - Conclusiones"
+          eyebrow="06 - Conclusiones"
           title="¿Que nos dice el analisis sobre la criminalidad en Bogota?"
           desc="Los modelos no hablan solos. Traducimos los resultados tecnicos en conclusiones sobre la dinamica urbana del delito en la capital colombiana."
         />
