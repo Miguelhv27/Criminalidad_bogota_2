@@ -1,0 +1,9 @@
+variable,variable_legible,coeficiente,error_estandar,z_score,p_valor,significativo
+CONSTANTE,Constante,129.3091,34.5836,3.739,0.00018,True
+tasa_hurto_a_personas,Hurto a personas,0.9495,0.0251,37.904,0.0,True
+tasa_violencia_intrafamiliar,Violencia intrafamiliar,0.803,0.2115,3.7971,0.00015,True
+tasa_lesiones_personales,Lesiones personales,1.1452,0.642,1.7839,0.07444,False
+tasa_homicidios,Homicidios,-1.0885,2.4529,-0.4438,0.65721,False
+tasa_hurto_a_comercio,Hurto a comercio,1.7705,0.3618,4.8931,0.0,True
+tasa_extorsion,Extorsión,5.9432,2.2958,2.5888,0.00963,True
+W_tasa_total (Rho),Rho (efecto vecinos),-0.0164,0.015,-1.087,0.27702,False
